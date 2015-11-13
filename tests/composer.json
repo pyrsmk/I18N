@@ -1,0 +1,6 @@
+{
+	"require": {
+		"pyrsmk/minisuite": "2.0.*",
+		"pyrsmk/funktions": "^0.1.6"
+	}
+}
