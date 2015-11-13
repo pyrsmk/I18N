@@ -1,5 +1,5 @@
 {
-	"name": "pyrsmk/i18n",
+	"name": "pyrsmk/translator",
 	"description": "Simple translation tool for CLI/HTTP",
 	"keywords": [
 		"i18n",
