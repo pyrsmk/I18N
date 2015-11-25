@@ -88,4 +88,4 @@ echo $translator->normalizeLocale('sl_Latn-IT_nedis');
 License
 -------
 
-Funktions is released under the [MIT license](http://dreamysource.mit-license.org).
+This library is released under the [MIT license](http://dreamysource.mit-license.org).
