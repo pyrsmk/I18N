@@ -17,7 +17,7 @@ Define your default locale
 
 First, we need to define the default locale of our website (often `en_EN`) :
 
-`` php
+``` php
 $translator = new Translator\Http('en_EN');
 ```
 
