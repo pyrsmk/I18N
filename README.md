@@ -39,9 +39,6 @@ If you need to know which locale Translator will use internally for translation,
 // If the client locale is 'de_DE', it will return it
 // If no valid locale is defined, it will return the default one
 $locale = $translator->guessLocale(array('en_EN', 'fr', 'de_DE'));
-
-// By setting true as second parameter, it will return 'de'
-$locale = $translator->guessLocale(array('en_EN', 'fr', 'de_DE'), true);
 ```
 
 Notes :

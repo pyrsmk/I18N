@@ -59,8 +59,8 @@ $minisuite->expects('Replacements')
 		  ->equals('Le chat noir, Moustaches, est dans le jardin.');
 
 $minisuite->expects('Guess locale : found')
-		  ->that($translator->guessLocale(array('en_EN', 'fr_FR'), true))
-		  ->equals('fr');
+		  ->that($translator->guessLocale(array('en_EN', 'fr_FR')))
+		  ->equals('fr_FR');
 
 $minisuite->expects('Guess locale : default locale')
 		  ->that($translator->guessLocale(array('en_US')))

@@ -99,17 +99,15 @@ abstract class Translator extends \Chernozem {
 		Guess the locale to use
 
         Parameters
-            boolean $format : true to return a simple locale like 'fr' instead of 'fr_FR'
+            array $locales
 
         Return
-            string, null
+            string
 	*/
-	public function guessLocale($locales, $force = false) {
+	public function guessLocale($locales) {
 		foreach($this->_locales as $locale) {
-            if($lc = locale_lookup($locales, $locale)) {
-				if($force) {
-					list($lc,) = explode('_', $lc);
-				}
+			$lc = locale_lookup($locales, $locale);
+            if($lc) {
                 return $lc;
             }
         }
