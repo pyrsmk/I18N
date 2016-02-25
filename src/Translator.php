@@ -26,7 +26,7 @@ abstract class Translator extends \Chernozem {
     public function __construct($default, $force = false) {
 		// Guess the client's locale
         if(!$force) {
-            $this->_locales = $this->_guessLocales();
+            $this->_locales = $this->_guessClientLocales();
         }
 		// Add default locale
         $this->_locales[] = $this->normalizeLocale((string)$default);
@@ -40,7 +40,21 @@ abstract class Translator extends \Chernozem {
 		Return
 			array
 	*/
-	abstract protected function _guessLocales();
+	abstract protected function _guessClientLocales();
+	
+	/*
+		Force the provided locale
+
+        Parameters
+            string $locale
+
+        Return
+            Translator
+	*/
+	public function forceLocale($locale) {
+		$this->_locales = array((string)$locale);
+		return $this;
+	}
     
     /*
         Normalize the provided locale
@@ -80,6 +94,27 @@ abstract class Translator extends \Chernozem {
 		}
 		return $this;
     }
+	
+	/*
+		Guess the locale to use
+
+        Parameters
+            boolean $format : true to return a simple locale like 'fr' instead of 'fr_FR'
+
+        Return
+            string, null
+	*/
+	public function guessLocale($locales, $force = false) {
+		foreach($this->_locales as $locale) {
+            if($lc = locale_lookup($locales, $locale)) {
+				if($force) {
+					list($lc,) = explode('_', $lc);
+				}
+                return $lc;
+            }
+        }
+		return $this->_locales[count($this->_locales) - 1];
+	}
 
     /*
         Translate a string
@@ -92,28 +127,25 @@ abstract class Translator extends \Chernozem {
             string
     */
     public function translate($name, array $data = array()) {
-        // Prepare data
-        $available_translations = array_keys($this->_translations);
         // Guess the locale to use
-        foreach($this->_locales as $locale) {
-            if($lc = locale_lookup($available_translations, $locale)) {
-                // Translate the provided string
-				$translation = $this->_translations[$lc][$name];
-                if($translation) {
-					// Compute search values
-					$searches = array();
-					$replacements = array();
-					foreach($data as $name => $value) {
-						$searches[] = $this->start_delimiter.$name.$this->end_delimiter;
-						$replacements[] = $value;
-					}
-					// Replace some values
-					$translation = str_replace($searches, $replacements, $translation);
-					// Return the final translation
-                    return $translation;
-                }
-            }
-        }
-        throw new \Exception("There's no translation for the '$name' string");
+		$locale = $this->guessLocale(array_keys($this->_translations));
+		// Translate the provided string
+		$translation = $this->_translations[$locale][$name];
+		if($translation) {
+			// Compute search values
+			$searches = array();
+			$replacements = array();
+			foreach($data as $name => $value) {
+				$searches[] = $this->start_delimiter.$name.$this->end_delimiter;
+				$replacements[] = $value;
+			}
+			// Replace some values
+			$translation = str_replace($searches, $replacements, $translation);
+			// Return the final translation
+			return $translation;
+		}
+		else {
+        	throw new \Exception("There's no translation for the '$name' string");
+		}
     }
 }

@@ -13,7 +13,7 @@ class Http extends \Translator {
 		Return
 			array
 	*/
-    protected function _guessLocales() {
+    protected function _guessClientLocales() {
         // Get the locales
         $locales = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
         // Format the locales

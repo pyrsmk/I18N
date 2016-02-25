@@ -1,4 +1,4 @@
-Translator 1.0.0
+Translator 1.1.0
 ================
 
 Translator is a small I18N/L10N solution with simplicity and flexibility in mind.
@@ -25,6 +25,23 @@ If you want to force your default locale to be the only one of the site, set the
 
 ```php
 $translator = new Translator\Http('fr_FR', true);
+```
+
+You can force it after instanciation with :
+
+```php
+$translator->forceLocale('de');
+```
+
+If you need to know which locale Translator will use internally for translation, you can call `guessLocale()` by passing an array of locales to match :
+
+```php
+// If the client locale is 'de_DE', it will return it
+// If no valid locale is defined, it will return the default one
+$locale = $translator->guessLocale(array('en_EN', 'fr', 'de_DE'));
+
+// By setting true as second parameter, it will return 'de'
+$locale = $translator->guessLocale(array('en_EN', 'fr', 'de_DE'), true);
 ```
 
 Notes :

@@ -13,7 +13,7 @@ class Cli extends \Translator {
 		Return
 			array
 	*/
-    protected function _guessLocales(){
+    protected function _guessClientLocales(){
         $locales = array();
         // Get the current locales
         $lcs = setlocale(LC_ALL, null);
