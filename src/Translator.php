@@ -66,7 +66,15 @@ abstract class Translator extends \Chernozem {
             string
     */
     public function normalizeLocale($locale) {
-        $pieces = locale_parse(str_replace('_', '-', (string)$locale));
+		$locale = str_replace('_', '-', (string)$locale);
+		if(function_exists('locale_parse')) {
+        	$pieces = locale_parse($locale);
+		}
+		else {
+			$pieces = explode('-', $locale);
+			$pieces['language'] = $pieces[0];
+			$pieces['region'] = $pieces[1];
+		}
         if(isset($pieces['region'])) {
             return $pieces['language'].'_'.$pieces['region'];
         }
@@ -106,7 +114,12 @@ abstract class Translator extends \Chernozem {
 	*/
 	public function guessLocale($locales) {
 		foreach($this->_locales as $locale) {
-			$lc = locale_lookup($locales, $locale);
+			if(function_exists('locale_lookup')) {
+				$lc = locale_lookup($locales, $locale);
+			}
+			else {
+				
+			}
             if($lc) {
                 return $lc;
             }

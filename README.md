@@ -1,4 +1,4 @@
-Translator 1.1.0
+Translator 1.2.0
 ================
 
 Translator is a small I18N/L10N solution with simplicity and flexibility in mind.
