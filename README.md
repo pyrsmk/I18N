@@ -1,4 +1,4 @@
-Translator 1.2.0
+Translator 1.2.1
 ================
 
 Translator is a small I18N/L10N solution with simplicity and flexibility in mind.
@@ -8,7 +8,7 @@ Install
 
 Pick up the source or install it with [Composer](https://getcomposer.org/) :
 
-```json
+```
 composer require pyrsmk/translator
 ```
 
