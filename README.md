@@ -83,7 +83,7 @@ echo $translator->translate('dog');
 Translator can also replace strings in your translations :
 
 ```php
-	// Prints 'Bonjour, M. Philippe!'
+// Prints 'Bonjour, M. Philippe!'
 echo $translator->translate('hello', array(
 	'name' => 'Philippe'
 ));
