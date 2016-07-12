@@ -1,6 +1,6 @@
 {
 	"name": "pyrsmk/translator",
-	"description": "Simple translation tool for CLI/HTTP",
+	"description": "Simple translation tool for CLI/HTTP environments",
 	"keywords": [
 		"i18n",
 		"l10n",
@@ -10,7 +10,8 @@
 		"translation",
 		"location",
 		"region",
-		"translate"
+		"translate",
+		"chernozem"
 	],
 	"license": "MIT",
 	"authors": [{
@@ -21,11 +22,11 @@
 	"require": {
 		"php": ">=5.3.0",
 		"ext-intl": "*",
-		"pyrsmk/chernozem": "^3.0"
+		"pyrsmk/chernozem": "^4.1"
 	},
 	"autoload": {
-		"psr-0" : {
-			"" : "src/"
+		"psr-4" : {
+			"Translator\\" : "src/"
 		}
 	}
 }

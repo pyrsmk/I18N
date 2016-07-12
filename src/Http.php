@@ -5,7 +5,7 @@ namespace Translator;
 /*
     Determine the client's locale on HTTP environment
 */
-class Http extends \Translator {
+class Http extends AbstractTranslator {
 
     /*
 		Try to guess the client's locales

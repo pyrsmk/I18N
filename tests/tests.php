@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\ClassLoader\Psr4ClassLoader;
+
 ########################################################### Prepare
 
 error_reporting(E_ALL);
@@ -7,67 +9,80 @@ error_reporting(E_ALL);
 require __DIR__.'/../vendor/autoload.php';
 require __DIR__.'/vendor/autoload.php';
 
-$minisuite = new MiniSuite('Translator');
+$loader = new Psr4ClassLoader;
+$loader->addPrefix('Translator\\', '../src');
+$loader->register();
 
-########################################################### Tests
+########################################################### Basics
 
-if(php_sapi_name() == 'apache2handler') {
-	$translator = new Translator\Http('en_EN');
-	echo '<pre>';
-}
-else {
-	$translator = new Translator\Cli('en_EN');
-}
+$minisuite = new MiniSuite\Suite('Basics');
 
-$minisuite->expects('Build with default locale')
-		  ->that($translator['locales'])
-		  ->isDefined('fr_FR')
-		  ->isDefined('en_EN');
+$minisuite->hydrate(function($minisuite) {
+	if(php_sapi_name() == 'apache2handler') {
+		$minisuite['translator'] = new Translator\Http('it');
+		echo '<pre>';
+	}
+	else {
+		$minisuite['translator'] = new Translator\Cli('it');
+	}
+});
 
-$translator = new Translator\Cli('en_EN', true);
-
-$minisuite->expects('Build with forced locale')
-		  ->that($translator['locales'])
-		  ->isTheSameAs(array('en_EN'));
-
-$minisuite->expects('Normalizing locale')
-		  ->that($translator->normalizeLocale('sl_Latn-IT_nedis'))
+$minisuite->expects('Normalize locale')
+		  ->that($minisuite['translator']->normalizeLocale('sl_Latn-IT_nedis'))
 		  ->equals('sl_IT');
 
-$translator = new Translator\Cli('en_EN');
+$minisuite->expects('No translations loaded')
+		  ->that(function($minisuite) {
+			  return $minisuite['translator']->getLocale();
+		  })
+		  ->equals('it');
 
-foreach(lessdir('./langs/') as $file) {
-	$file = './langs/'.$file;
-	$translator->load(pathinfo($file, PATHINFO_FILENAME), json_decode(file_get_contents($file)));
-}
-
-$minisuite->expects('Loading translations')
-		  ->that($translator['translations'])
-		  ->isTheSameAs(array(
-		  	'en' => array('test' => 'The black cat, {name}, is in the garden.'),
-			'fr_FR' => array('test' => 'Le chat noir, {name}, est dans le jardin.')
-		  ));
-
-$minisuite->expects('Translate')
-		  ->that($translator->translate('test'))
-		  ->equals('Le chat noir, {name}, est dans le jardin.');
-
-$minisuite->expects('Replacements')
-		  ->that($translator->translate('test', array(
-		  	'name' => 'Moustaches'
-		  )))
-		  ->equals('Le chat noir, Moustaches, est dans le jardin.');
-
-$minisuite->expects('Guess locale : found')
-		  ->that($translator->guessLocale(array('en_EN', 'fr_FR')))
+$minisuite->expects('Translations loaded')
+		  ->that(function($minisuite) {
+			  $minisuite['translator']->load('fr_FR', json_decode(file_get_contents('langs/fr_FR.json')));
+			  return $minisuite['translator']->getLocale();
+		  })
 		  ->equals('fr_FR');
 
-$minisuite->expects('Guess locale : default locale')
-		  ->that($translator->guessLocale(array('en_US')))
-		  ->isTheSameAs('en_EN');
-
-$translator->forceLocale('en_EN');
-
 $minisuite->expects('Force locale')
-		  ->that($translator->translate('test'))
+		  ->that(function($minisuite) {
+			  $minisuite['translator']->setLocale('ru');
+			  return $minisuite['translator']->getLocale();
+		  })
+		  ->equals('ru');
+
+########################################################### Translations
+
+$minisuite = new MiniSuite\Suite('Translations');
+
+$minisuite->hydrate(function($minisuite) {
+	if(php_sapi_name() == 'apache2handler') {
+		$minisuite['translator'] = new Translator\Http('it');
+		echo '<pre>';
+	}
+	else {
+		$minisuite['translator'] = new Translator\Cli('it');
+	}
+	$minisuite['translator']->load('en', json_decode(file_get_contents('langs/en.json')));
+	$minisuite['translator']->load('fr_FR', json_decode(file_get_contents('langs/fr_FR.json')));
+});
+
+$minisuite->expects('Translate')
+		  ->that($minisuite['translator']->translate('test'))
+		  ->equals('Le chat noir, {name}, est dans le jardin.');
+
+$minisuite->expects('Translate with forced locale')
+		  ->that(function($minisuite) {
+			  $minisuite['translator']->setLocale('en');
+			  return $minisuite['translator']->translate('test');
+		  })
 		  ->equals('The black cat, {name}, is in the garden.');
+
+$minisuite->expects('Translate with parameters')
+		  ->that($minisuite['translator']->translate('test', ['name' => 'Fanion']))
+		  ->equals('Le chat noir, Fanion, est dans le jardin.');
+
+
+
+
+

@@ -1,7 +1,11 @@
-Translator 1.2.1
+Translator 2.0.0
 ================
 
-Translator is a small I18N/L10N solution with simplicity and flexibility in mind.
+Translator is a small I18N/L10N library, based on [Chernozem](https://github.com/pyrsmk/Chernozem) (we advise you to read its documentation). Here's the available options through Chernozem :
+
+- client_locales : the client's locales
+- delimiters : set the start/end delimiter for string replacement (default : `['start' => '{', 'end' => '}']`)
+- translations : the loaded translations
 
 Install
 -------
@@ -12,39 +16,30 @@ Pick up the source or install it with [Composer](https://getcomposer.org/) :
 composer require pyrsmk/translator
 ```
 
-Define your default locale
---------------------------
+Basics
+------
 
-First, we need to define the default locale of our website (often `en_EN`) :
+Translator is available for a website (`Translator\Http`) and a CLI application (`Translator\Cli`). For the next examples, we'll use `Translator\Http`.
 
-``` php
+First, we need to define the default locale at instantiation. This locale will be used when no client's locale is supported by your application.
+
+```php
 $translator = new Translator\Http('en_EN');
 ```
 
-If you want to force your default locale to be the only one of the site, set the second parameter to `true` :
+Translator will find what locale to use by comparing the client's locales and the defined available locales (based on the loaded translations)
+
+If needed, you can force Translator to use a specific locale :
 
 ```php
-$translator = new Translator\Http('fr_FR', true);
+$translator->setLocale('fr');
 ```
 
-You can force it after instanciation with :
+And you can retrieve what locale Translator will use for its translations with :
 
 ```php
-$translator->forceLocale('de');
+$translator->getLocale();
 ```
-
-If you need to know which locale Translator will use internally for translation, you can call `guessLocale()` by passing an array of locales to match :
-
-```php
-// If the client locale is 'de_DE', it will return it
-// If no valid locale is defined, it will return the default one
-$locale = $translator->guessLocale(array('en_EN', 'fr', 'de_DE'));
-```
-
-Notes :
-
-- there is also a `Translator\Cli` object for CLI environment
-- registered locales are accessible via `$translator['locales']`
 
 Load your translations files
 ----------------------------
@@ -56,8 +51,7 @@ Translator doesn't implement adapters to load your files, it just expect the nam
 {
 	"cat": "chat",
 	"dog": "chien",
-	"turtle": "tortue",
-	"hello": "Bonjour, M. {name}!"
+	"turtle": "tortue"
 }
 ```
 
@@ -65,10 +59,6 @@ Translator doesn't implement adapters to load your files, it just expect the nam
 // Load the JSON file
 $translator->load('fr_FR', json_decode(file_get_contents('fr_FR.json')));
 ```
-
-Notes :
-
-- loaded translations are accessible via `$translator['translations']`
 
 Translate!
 ----------
@@ -82,6 +72,13 @@ echo $translator->translate('dog');
 
 Translator can also replace strings in your translations :
 
+```json
+/* fr_FR.json */
+{
+	"hello": "Bonjour, M. {name}!"
+}
+```
+
 ```php
 // Prints 'Bonjour, M. Philippe!'
 echo $translator->translate('hello', array(
@@ -89,8 +86,8 @@ echo $translator->translate('hello', array(
 ));
 ```
 
-Bonus : normalize a locale
---------------------------
+Normalize a locale
+------------------
 
 If needed, you can normalize any locale you want with :
 

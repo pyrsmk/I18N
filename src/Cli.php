@@ -5,7 +5,7 @@ namespace Translator;
 /*
     Determine the client's locale on CLI environment
 */
-class Cli extends \Translator {
+class Cli extends AbstractTranslator {
 
     /*
 		Try to guess the client's locales
