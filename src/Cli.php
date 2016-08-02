@@ -14,7 +14,7 @@ class Cli extends AbstractTranslator {
 			array
 	*/
     protected function _guessClientLocales(){
-        $locales = array();
+        $locales = [];
         // Get the current locales
         $lcs = setlocale(LC_ALL, null);
         // Format the locales
@@ -39,7 +39,7 @@ class Cli extends AbstractTranslator {
     /*
         array $_languages: language locale list
     */
-    protected $_languages = array(
+    protected $_languages = [
         'Afrikaans'         => 'af',
         'Albanian'          => 'sq',
         'Amharic'           => 'am',
@@ -173,12 +173,12 @@ class Cli extends AbstractTranslator {
         'Yiddish'           => 'yi',
         'Yoruba'            => 'yo',
         'Zulu'              => 'zu',
-    );
+    ];
 
     /*
         array $_regions; region locale list
     */
-    protected $_regions = array(
+    protected $_regions = [
         'Albania'                    => 'AL',
         'Algeria'                    => 'DZ',
         'Argentina'                  => 'AR',
@@ -284,6 +284,6 @@ class Cli extends AbstractTranslator {
         'Venezuela'                  => 'VE',
         'Yemen'                      => 'YE',
         'Zimbabwe'                   => 'ZW',
-    );
+    ];
 
 }

@@ -1,4 +1,4 @@
-Translator 2.0.0
+Translator 2.0.1
 ================
 
 Translator is a small I18N/L10N library, based on [Chernozem](https://github.com/pyrsmk/Chernozem) (we advise you to read its documentation). Here's the available options through Chernozem :
@@ -81,9 +81,9 @@ Translator can also replace strings in your translations :
 
 ```php
 // Prints 'Bonjour, M. Philippe!'
-echo $translator->translate('hello', array(
+echo $translator->translate('hello', [
 	'name' => 'Philippe'
-));
+]);
 ```
 
 Normalize a locale
