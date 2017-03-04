@@ -1,4 +1,4 @@
-Translator 2.0.1
+Translator 2.0.2
 ================
 
 Translator is a small I18N/L10N library, based on [Chernozem](https://github.com/pyrsmk/Chernozem) (we advise you to read its documentation). Here's the available options through Chernozem :
