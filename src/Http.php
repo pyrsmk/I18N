@@ -14,6 +14,10 @@ class Http extends AbstractTranslator {
 			array
 	*/
     protected function _guessClientLocales() {
+        // Verify
+        if(!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            return [];
+        }
         // Get the locales
         $locales = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
         // Format the locales
